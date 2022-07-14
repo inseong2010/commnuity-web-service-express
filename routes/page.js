@@ -2,7 +2,7 @@ var express = require("express");
 var router = express.Router();
 var path = require('path');
 const fs = require("fs");
-var sanitizehtml = require('sanitize-html');
+var sanitizeHtml = require('sanitize-html');
 var template = require('../lib/template');
 
 router.get('/new', (req, res) => {
@@ -26,12 +26,16 @@ router.post('/new', (req, res) => {
     var post = req.body;
     var title = post.title;
     var description = post.description
-    fs.writeFile(`data/${title}`, description, (err) => {
-        if (err) throw err;
-        else {
-            res.redirect(`/page/${title}`);
-        };
-    });
+    /* if (!title.value) {
+        return alert("제목 또는 내용을 작성하세요");
+    } else  {*/
+        fs.writeFile(`data/${title}`, description, (err) => {
+            if (err) throw err;
+            else {
+                res.redirect(`/page/${title}`);
+            };
+        });
+    // };
 });
 
 router.get('/update/:pageId', (req, res) => {
@@ -91,8 +95,8 @@ router.get('/:pageId', (req, res, next) => {
             next(err);
         } else {
         var title = req.params.pageId;
-        var sanitizedTitle = sanitizehtml(title);
-        var sanitizedDescription = sanitizehtml(description);
+        var sanitizedTitle = sanitizeHtml(title);
+        var sanitizedDescription = sanitizeHtml(description);
         var list = template.LIST(req.list);
         var html = template.HTML(sanitizedTitle, list, `<h2>${sanitizedTitle}</h2><p>${sanitizedDescription}</p>`, 
         `<a href="/page/new">New Page!!</a>

@@ -2,8 +2,6 @@ var express = require("express");
 var app = express();
 const fs = require("fs");
 var compression = require('compression');
-var indexRouter = require('./routes/index');
-var pageRouter = require('./routes/page');
 const PORT = 80;
 
 app.use(express.static('public'));
@@ -16,8 +14,13 @@ app.get('*', (req, res, next) => {
     });
 });
 
+var indexRouter = require('./routes/index');
+var pageRouter = require('./routes/page');
+var authRouter = require('./routes/auth');
+
 app.use('/', indexRouter);
 app.use('/page', pageRouter);
+app.use('/auth', authRouter);
 
 app.use((req, res, next) => {
     res.status(404).send(`
