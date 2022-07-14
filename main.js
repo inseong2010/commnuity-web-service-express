@@ -16,11 +16,9 @@ app.get('*', (req, res, next) => {
 
 var indexRouter = require('./routes/index');
 var pageRouter = require('./routes/page');
-var authRouter = require('./routes/auth');
 
 app.use('/', indexRouter);
 app.use('/page', pageRouter);
-app.use('/auth', authRouter);
 
 app.use((req, res, next) => {
     res.status(404).send(`
